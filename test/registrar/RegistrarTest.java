@@ -74,15 +74,18 @@ class RegistrarTest {
         assertFalse(comp127.getRoster().contains(sally));
     }
 
-    // @Test
-    // void clientsCannotModifyCourses() {
-    //     List<Course> courses = sally.getCourses();
-    //     courses.add(comp127);
-    // }
-
     @Test
     void clientsCannotModifyCourses() {
+        assertThrows(UnsupportedOperationException.class, () -> {
         sally.getCourses().add(comp127);
+        });
+    }
+
+    @Test
+    void clientsCannotModifyRoster() {
+        assertThrows(UnsupportedOperationException.class, () -> {
+        comp127.getRoster().add(sally);
+        });
     }
 
     // ------ Post-test invariant check ------
