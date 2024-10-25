@@ -1,6 +1,8 @@
 package registrar;
 
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +15,10 @@ class RegistrarTest {
     // ------ Setup ------
 
     private TestObjectFactory factory = new TestObjectFactory();
-    private Course comp127, math6, basketWeaving101;
+    private Course comp127, math6, basketWeaving101, comp123;
     private Student sally, fred, zongo;
+
+    private Set<Student> sallyList= new HashSet<>();
 
     @BeforeEach
     public void createStudents() {
@@ -30,6 +34,11 @@ class RegistrarTest {
 
         math6 = factory.makeCourse("Math 6", "All About the Number Six");
         basketWeaving101 = factory.makeCourse("Underwater Basket Weaving 101", "Senior spring semester!");
+        
+        comp123 = factory.makeCourse("Comp 123", "Yippee");
+        comp123.setEnrollmentLimit(2);
+
+        sallyList.add(sally);
     }
 
     // ------ Enrolling ------
@@ -44,6 +53,13 @@ class RegistrarTest {
         sally.enrollIn(comp127);
         assertEquals(List.of(comp127), sally.getCourses());
         assertEquals(List.of(sally), comp127.getRoster());
+    }
+
+    @Test
+    void multipleSame() {
+        sally.enrollIn(comp123);
+        sally.enrollIn(comp123);
+        assertEquals(comp123.getRoster(), sallyList);
     }
 
     // ------ Enrollment limits ------
@@ -122,4 +138,6 @@ class RegistrarTest {
             c + " has an enrollment limit of " + c.getEnrollmentLimit()
                 + ", but has " + c.getRoster().size() + " students");
     }
+
+    
 }
